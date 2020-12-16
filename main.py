@@ -2,8 +2,6 @@ import os
 
 
 def generate_structure(directory, codes, exceptions):
-    codes.sort()
-    exceptions.sort()
     scores, pretty = generate_arrays(codes, exceptions)
     path = directory + r"\Bingo"
     if not os.path.exists(path):
@@ -37,9 +35,9 @@ def generate_items(directory, codes, exceptions, scores, pretty):
     for i in range(len(scores)):
         with open(os.path.join(directory, scores[i].lower() + ".mcfunction"), 'w') as temp_file:
             if codes[i] in exceptions:
-                temp_file.write('scoreboard objectives add craft' + scores[i] + ' minecraft.crafted:minecraft.' + codes[i] + '\n')
-            else:
                 temp_file.write('scoreboard objectives add craft' + scores[i] + ' minecraft.picked_up:minecraft.' + codes[i] + '\n')
+            else:
+                temp_file.write('scoreboard objectives add craft' + scores[i] + ' minecraft.crafted:minecraft.' + codes[i] + '\n')
             temp_file.write('scoreboard objectives add score' + scores[i] + ' dummy\n')
             temp_file.write('scoreboard players set @a score' + scores[i] + ' 0\n')
             temp_file.write('tellraw @a {"text":"' + pretty[i] + '"}\n')
@@ -61,9 +59,9 @@ def generate_create_board(directory, scores):
         temp_file.write('execute as @s at @s run function bingo:create_board/pick_items\n')
 
     with open(os.path.join(directory, "pick_items.mcfunction"), 'w') as temp_file:
-        temp_file.write('execute as @s at @s run function bingo:create_board/random')
-        temp_file.write('execute as @a if score @s incrementItems matches 9.. run function bingo:bingo_board')
-        temp_file.write('execute unless score @s incrementItems matches 9.. run function bingo:create_board/pick_items')
+        temp_file.write('execute as @s at @s run function bingo:create_board/random\n')
+        temp_file.write('execute as @a if score @s incrementItems matches 9.. run function bingo:bingo_board\n')
+        temp_file.write('execute unless score @s incrementItems matches 9.. run function bingo:create_board/pick_items\n')
 
     with open(os.path.join(directory, "random_select.mcfunction"), 'w') as temp_file:
         for s in reversed(scores):
@@ -185,14 +183,17 @@ def generate_arrays(codes, exceptions):
 
     scores = scores_list(codes)
 
+    print(pretty)
+    print(scores)
+
     return scores, pretty
 
 
 #####################################################################################################################
 #                               THIS IS WHERE THE ITEMS FOR THE BINGO BOARD GO                                      #
 #####################################################################################################################
-item_codes = ["anvil", "apple", "book", "bow", "chest", "crafting_table", "crossbow", "dispenser", "dried_kelp_block",
-              "furnace", "hay_block", "hopper", "oak_boat", "piston", "powered_rail", "sugar_cane"]
+item_codes = ["sugar_cane", "anvil", "apple", "book", "bow", "chest", "crafting_table", "crossbow", "dispenser", "dried_kelp_block",
+              "furnace", "hay_block", "hopper", "oak_boat", "piston", "powered_rail"]
 
 #####################################################################################################################
 #                     THIS IS WHERE ITEMS THAT WON'T BE CRAFTED AND INSTEAD PICKED UP WILL GO                       #
