@@ -2,6 +2,8 @@ import os
 
 
 def generate_structure(directory, codes, exceptions):
+    codes.sort()
+    exceptions.sort()
     scores, pretty = generate_arrays(codes, exceptions)
     path = directory + r"\Bingo"
     if not os.path.exists(path):
@@ -31,35 +33,6 @@ def generate_structure(directory, codes, exceptions):
         print("Bingo datapack directory already exists in: " + directory)
 
 
-# scoreboard objectives add craftAnvil minecraft.crafted:minecraft.anvil
-# scoreboard objectives add scoreAnvil dummy
-#
-# scoreboard players set @a scoreAnvil 0
-# scoreboard players set @s guiAnvil 1
-# tellraw @a {"text":"Anvil"}
-#
-# scoreboard players add @s incrementItems 1
-#
-# scoreboard players set @s rangeAnvil -1
-#
-# scoreboard players remove @s rangeApple 1
-# scoreboard players remove @s rangeBook 1
-# scoreboard players remove @s rangeBow 1
-# scoreboard players remove @s rangeChest 1
-# scoreboard players remove @s rangeCraftingTbl 1
-# scoreboard players remove @s rangeCrossBow 1
-# scoreboard players remove @s rangeDispenser 1
-# scoreboard players remove @s rangeDriedKelp 1
-# scoreboard players remove @s rangeFurnace 1
-# scoreboard players remove @s rangeHayBale 1
-# scoreboard players remove @s rangeHopper 1
-# scoreboard players remove @s rangeOakBoat 1
-# scoreboard players remove @s rangePiston 1
-# scoreboard players remove @s rangePwrdRail 1
-#
-# scoreboard players remove @s range 1
-
-
 def generate_items(directory, codes, exceptions, scores, pretty):
     for i in range(len(scores)):
         with open(os.path.join(directory, scores[i].lower() + ".mcfunction"), 'w') as temp_file:
@@ -71,7 +44,7 @@ def generate_items(directory, codes, exceptions, scores, pretty):
             temp_file.write('scoreboard players set @a score' + scores[i] + ' 0\n')
             temp_file.write('tellraw @a {"text":"' + pretty[i] + '"}\n')
             temp_file.write('scoreboard players add @s incrementItems 1\n')
-            temp_file.write('scoreboard players set @s range' + scores[i] + ' -1')
+            temp_file.write('scoreboard players set @s range' + scores[i] + ' -1\n')
             if i+1 < len(scores):
                 for j in range(i+1, len(scores)):
                     temp_file.write('scoreboard players remove @s range' + scores[j] + ' 1\n')
@@ -215,8 +188,15 @@ def generate_arrays(codes, exceptions):
     return scores, pretty
 
 
+#####################################################################################################################
+#                               THIS IS WHERE THE ITEMS FOR THE BINGO BOARD GO                                      #
+#####################################################################################################################
 item_codes = ["anvil", "apple", "book", "bow", "chest", "crafting_table", "crossbow", "dispenser", "dried_kelp_block",
               "furnace", "hay_block", "hopper", "oak_boat", "piston", "powered_rail", "sugar_cane"]
+
+#####################################################################################################################
+#                     THIS IS WHERE ITEMS THAT WON'T BE CRAFTED AND INSTEAD PICKED UP WILL GO                       #
+#####################################################################################################################
 item_craft_exc = ["apple", "sugar_cane"]
 
 dp_path = r"C:\Users\erter\Documents\Datapacks"
