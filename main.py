@@ -183,9 +183,6 @@ def generate_arrays(codes, exceptions):
 
     scores = scores_list(codes)
 
-    print(pretty)
-    print(scores)
-
     return scores, pretty
 
 
